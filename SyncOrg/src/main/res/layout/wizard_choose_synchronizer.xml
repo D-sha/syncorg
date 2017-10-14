@@ -22,13 +22,13 @@
             android:text="@string/i_want_to_sync_using"
             android:textSize="20sp"
             android:textStyle="bold" />
-        <!--<RadioButton-->
-        <!--android:id="@+id/webdav"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textSize="18sp"-->
-        <!--android:text="@string/wizard_webdav"-->
-        <!--android:checked="true"/>-->
+        <RadioButton
+        android:id="@+id/webdav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/wizard_webdav"
+        android:checked="true"/>
         <!--<RadioButton-->
         <!--android:textSize="18sp"-->
         <!--android:id="@+id/dropbox"-->

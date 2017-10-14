@@ -182,5 +182,6 @@
         Please activate it in: Android settings -> Apps -> SyncOrg -> Permissions.</string>
     <string name="title_activity_error_report">ErrorReportActivity</string>
     <string name="title_activity_main2">MainActivity2</string>
+    <string name="wizard_webdav">Webdav server</string>
 
 </resources>
