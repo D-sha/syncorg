@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    tools:context="com.coste.syncorg.gui.wizard.wizards.WebDAVWizard">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -24,29 +26,29 @@
                 android:gravity="center"
                 android:paddingBottom="20dp"
                 android:text="@string/log_in_to_webdav"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/username"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/wizard_webdav_username"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text|textEmailAddress"
-                android:singleLine="true"
-                android:textSize="20dp" />
+                android:textSize="20sp"
+                android:maxLines="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:text="@string/password"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/wizard_webdav_password"
@@ -54,23 +56,29 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:password="true"
-                android:singleLine="true"
-                android:textSize="20dp" />
+                android:textSize="20sp"
+                android:maxLines="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:text="@string/url"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/wizard_webdav_url"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textUri"
-                android:singleLine="true"
-                android:textSize="20dp" />
+                android:textSize="20sp"
+                android:maxLines="1" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="196dp"
+                android:layout_height="wrap_content"
+                android:text="Button" />
 
             <Button
                 android:id="@+id/wizard_webdav_login_button"
@@ -78,14 +86,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/login_webdav"
-                android:textSize="20dp" />
+                android:onClick="loginWebdav"
+                android:textSize="20sp" />
+
         </LinearLayout>
 
         <View
             android:layout_width="fill_parent"
-            android:layout_height="1dp"
+            android:layout_height="0dp"
             android:layout_weight="1.0" />
 
-        <include layout="@layout/wizard_navbar_last" />
+        <!-- <include layout="@layout/wizard_navbar_last" />-->
     </LinearLayout>
 </ScrollView>

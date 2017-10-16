@@ -1,16 +1,17 @@
 package com.coste.syncorg.gui.wizard.wizards;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.coste.syncorg.MainActivity;
 import com.coste.syncorg.R;
 import com.coste.syncorg.synchronizers.WebDAVSynchronizer;
 
@@ -31,16 +32,12 @@ public class WebDAVWizard extends AppCompatActivity {
         webdavUser = (EditText) findViewById(R.id.wizard_webdav_username);
         webdavPass = (EditText) findViewById(R.id.wizard_webdav_password);
         webdavUrl = (EditText) findViewById(R.id.wizard_webdav_url);
-        Button webdavLoginButton = (Button) findViewById(R.id.wizard_webdav_login_button);
-        webdavLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-				loginWebdav();
-            }
-        });
     }
 
-	public void loginWebdav() {
+    //TODO connection test needs to check for org files
+    //todo probably need an ok button to return to Main
+    //todo it seems i need to reimplement a database clear
+	public void loginWebdav(View view) {
 		final String urlActual = webdavUrl.getText().toString();
 		final String passActual = webdavPass.getText().toString();
 		final String userActual = webdavUser.getText().toString();
@@ -64,7 +61,6 @@ public class WebDAVWizard extends AppCompatActivity {
             }
         }
         new Atask().execute("");
-
     }
 
 	public void saveSettings() {
@@ -73,12 +69,12 @@ public class WebDAVWizard extends AppCompatActivity {
 		SharedPreferences.Editor editor = appSettings.edit();
 
 		editor.putString(KEY_SYNC_SOURCE, "webdav");
-
 		editor.putString("webUrl", webdavUrl.getText().toString());
 		editor.putString("webPass", webdavPass.getText().toString());
 		editor.putString("webUser", webdavUser.getText().toString());
 
 		editor.apply();
-		finish();
+        finish();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 }
