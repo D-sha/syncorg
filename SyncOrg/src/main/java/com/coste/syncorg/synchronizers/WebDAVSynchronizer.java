@@ -7,13 +7,17 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.Base64;
+import android.util.Log;
 
 import com.coste.syncorg.R;
 import com.coste.syncorg.gui.CertificateConflictActivity;
+import com.coste.syncorg.orgdata.OrgFile;
+import com.coste.syncorg.services.PermissionManager;
 import com.coste.syncorg.util.FileUtils;
 import com.coste.syncorg.util.OrgUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +30,10 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -88,19 +96,25 @@ public class WebDAVSynchronizer extends Synchronizer {
                 throw e;
             }
         } catch (Exception e) {
+            Log.d("synctest", e.getMessage());
             return "Test Exception: " + e.getMessage();
+
         }
     }
 
     @Override
     public String getAbsoluteFilesDir() {
-        return null;
+        return remoteIndexPath;
     }
 
     @Override
     public boolean isConfigured() {
         if (this.remoteIndexPath.equals(""))
             return false;
+        Pattern checkUrl = Pattern.compile("http.*\\."); //(?:org|txt)$");
+        if (!checkUrl.matcher(this.remoteIndexPath).find()) {
+        //    return false;
+        }
 
         return true;
     }
@@ -138,7 +152,40 @@ public class WebDAVSynchronizer extends Synchronizer {
 
     @Override
     public SyncResult doInBackground(Void... voids) {
-        return null;
+        SyncResult result = new SyncResult();
+        if (!PermissionManager.permissionGranted(context)) return result;
+
+        //ArrayList<File> files = getFilesRecursively(remoteIndexPath));
+        ArrayList<File> files = getFilesRecursively(new File(getAbsoluteFilesDir()));
+        HashMap<String, Long> times_modified = OrgFile.getLastModifiedTimes(context);
+        result.deletedFiles = new TreeSet<>(times_modified.keySet());
+
+        for (File f : files) {
+            result.deletedFiles.remove(f.getAbsolutePath());
+            Long timeInDB = times_modified.get(f.getAbsolutePath());
+            if (timeInDB == null || f.lastModified() != timeInDB) {
+                result.changedFiles.add(f.getAbsolutePath());
+            }
+        }
+
+        return result;
+    }
+
+    private ArrayList<File> getFilesRecursively(File dir) {
+        ArrayList<File> result = new ArrayList<>();
+        if (dir == null || dir.listFiles() == null) return result;
+
+        for (File f : dir.listFiles()) {
+            // Skip hidden files
+            if (f.getName().startsWith(".")) continue;
+            if (f.isDirectory()) {
+                result.addAll(getFilesRecursively(f));
+            } else {
+                result.add(f);
+            }
+        }
+
+        return result;
     }
 
 

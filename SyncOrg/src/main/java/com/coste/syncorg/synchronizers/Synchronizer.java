@@ -73,14 +73,24 @@ public abstract class Synchronizer extends AsyncTask<Void, Void, SyncResult> {
 
         String syncSource = preferences.getString(KEY_SYNC_SOURCE, "");
 
-        if (syncSource.equals(SD_CARD))
+        switch (syncSource){
+            case GOOGLE_DRIVE: return new GoogleDriveSynchronizer(context);
+            case SD_CARD: return new SDCardSynchronizer(context);
+            case SSH: return new SSHSynchronizer(context);
+            case WEBDAV: return new WebDAVSynchronizer(context);
+            case EXTERNAL: return new ExternalSynchronizer(context);
+            default: return new ExternalSynchronizer(context);
+
+        }
+        /*if (syncSource.equals(SD_CARD))
+
             return new SDCardSynchronizer(context);
         else if (syncSource.equals(SSH))
             return new SSHSynchronizer(context);
         else if (syncSource.equals(GOOGLE_DRIVE))
             return new GoogleDriveSynchronizer(context);
         else
-            return new ExternalSynchronizer(context);
+            return new ExternalSynchronizer(context);*/
     }
 
     /**
